@@ -1,2 +1,2 @@
-# superpacman
-[CS-107] Introduction à la Programmation - 2020
+# Mini-Projet-2
+ 

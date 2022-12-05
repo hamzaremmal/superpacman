@@ -1,0 +1,17 @@
+  Ceci est fichier  qui explique brièvement les differentes mécaniques de ce SuperPacman 
+	-Quand l'écran d'acceuil apparait , cliquer sur n'importe quelle touche de direction pour commencer.
+	- Appuyer sur espace pour pauser le jeu.
+	- Appuyer sur n'importe quelle touche de direction pour continuer.
+	- Cliquer sur "D" pour zoomer et "S" pour dézoomer.
+	- Appuyer sur "P" pour sacrifier 1000 points en echanche d'un leurre qui se dirigera vers les fantomes(utilisation unique)
+	- Quand au moins trois Cherry sont mangées, apparition d'un Heart qui change d'emplacement toutes les 
+	 5 secondes et qui rend 2points de vie.
+	 -Quand au moins 3 Bonus sont mangés apparition d'une Orbe qui change d'emplacement toutes les 
+	 5 secondes et qui augmente la vitesse du joueur pendant 5 secondes.
+	 -Pour passer du niveau0 au niveau1 , recuperer la clé.
+	 - Pour passer du niveau 1 au niveau 2 , collecter tous les diamond de l'aire.
+	 -Les cléfs servent à ouvrir des gates 
+	 -Lorsque tous les diamonds du niveau 2 sont récupérés la prochaine gate vous mène vers le LevelX
+	 - Description du levelX : Niveau généré aléatoirement . 
+	 -Certains fantomes vous courses(Inky et Pinky),d'autres..... vous chasses!(Ghost_Arrow de couleur orange)
+	  Mesdames, Messie

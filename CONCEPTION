@@ -1,0 +1,89 @@
+Ce projet represente le jeu SuperPacman sorti sur borne d'arcade en 1982 et développé par Namco (sorti sur JAVA à l'époque du Covid-19 et développé par des futurs étudiants de la MàN. Oups...)
+Ce fichier aide à décrire la façon comment le jeu a été implémenté et la raison derrière cette conceptualisation.
+I- le démarage:
+	La maquette fournie nous permettait déjà de faire le démarrage du jeu.
+II- L'instance du Jeu:
+	Pour modéliser le jeu, une classe a été créée pour but de rassembler tout le contenu du jeu et gérer le fonctionnement interne de ce dernier.
+III- Les aires du jeu:
+	Comme chaque jeu diffère, Le jeu SuperPacman a lui aussi besoin d'aires de jeu (Différents niveaux). Ces aires sont représentées chaqu'une dans une classe (au nombre de 4). Toutes ces dernières sont regroupées dans un package dans le nom 
+	a été choisi de façon minutieuse et contre-inttuitif (area) PS: Le nom a été validé par les Grands Maitres (Pill Jates, Beff Vesos,... ;) )
+	a) Level 0: le niveau:
+		Ce niveau est simple, récupérez la clé et vous gagnerz. Du point de vu conception rien à dire, ormis le faite d'avoir la méthode createArea() qui génère les objets dont l'utilité  ce niveau est nécessaire.
+	b) Level 1: Pour nous, c'est le niveau 0.
+	Vous pouvez commmencer à jouer tranquillement.
+		La classe comme chaque aire possède la méthode createArea(), qui génere les objets dont la grille a besoin, le but de ce niveau: TOUT RÉCOLTER.
+	c) Level 2: Pour les personnes qui réussisent dans la vie
+		Vous pouvez jouer ,tranquillement je ne pense pas.
+		Comme chaque niveau, cette classe implemente la classe abstraite Area, et s'occupe dans sa méthode createArea(), de générer les objets du niveau comme les portes(Door) et les barrières(Gate).
+		Le but du niveau récupérer les clés et tous manger pour passer au niveau supérieur (le level X )
+	d) Level X: Ahoy, Ahoy, Ahoy, Si vous aimez les défis, vous êtes bien servis .
+		Je ne peux vraiment rien vous dire sur ce niveau, à chaque fois la machine vous crée une nouvelle grille.
+		Une grille est crée à chaque fois grace a l'algorithme décrit dans la classe MazeGenerator dans le package du même nom.Cette même classe s'occuper des couleurs des pixels pour avoir à la fin une behavior comme celle donnée dans la maquette.
+		Le but dans ce niveau gagné des points.
+	Vous imaginez bien que voir la princesse Zelda dans notre grille, ou notre cher Blinky à ces côtés peut troubler certains d'entre nous. Donc dans le même package, nous avons créés une classe SuperPacmanBehavior qui s'occupe de comment notre 
+	grille s'initialise et comment nos personnages( pas Miss Zelda biensur) vont évoluer dedans. Les cellules de notre grille ont chaqu'une d'elle un type ( Le contenu de la grille au départ), et tous ces types sont regroupées dans .... une énumération(SuperPacmanCellType)
+IV- Mais qui sont les personnages avec qui nous partageons cette grille:
+	a) SuperPacmanPlayer: Sans lui, il n'y a tout simplement pas de jeu (en tout cas aucune raison d'être)
+		Ce personnage et cette classe représente l'abstraction du joueur que l'on va contrôler. Il gére les interactions avec les fantomes et les diamants, et il est content quand il traverse une porte vu que c'est lui qui la gère.
+		Du point de vu implémentation, et comme chaque joueur, cette dernière hérite de la classe joueur, et redéfinit donc les méthodes pour caractériser se joueur.Le mouvement se fait à l'aide des touches directionnelles
+		Notre SuperPacmanPlayer gère la majorité des interactions, tous cela à l'aide d'un handler propre à lui (Classe interne protégé)
+	b) PacmanHelp: Comme disais nos anciens : "Mieux vaut être seul que mal accompagné", pacman dit "Mieux vaut être accompagné qu'être seul".
+		Cette classe est une représentation d'un nouveau joueur qui aide pacman dans sa quête, attention comme chaque personne dans l'univers, on a qu'une seule vie (Les chats... No joke here), notre chère compagnon lui aussi obéit a cette règle, sauf que le bigbang
+		se produit à chaque passage de porte.
+		Mélange entre SuperPacmanPlayer et Ghost, cette classe opte pour un design sous formes de Singleton. Du point de vue de l'implémentation, le mouvement est le même qu'un Pinky, mais les interactions sont fortement semblables à ceux du SuperPacmanPlayer ormis le faite de perdre des PV.
+		Notre bien aimé collègue fait son apparition en appuyant sur la touche P contre 1000 points du score. (Récolter des points c'est bien, les dépenser pour nos collègues c'est mieux.)
+	c) Ghost: Il fallait bien faire quelque chose dans ce jeu.
+		Cette classe abstraite représente ce que tous les fantômes sont: des fantômes. Elle oblige chaque sous-classe de cette dernière à implementer certaines méthodes pour décrire le bon fonctionnement de ce dernier et les intéractions que chaque fantômes doit avoir.
+		Les méthodes dont la classe oblige la redéfinition sont aux nomres de deux:
+			*getNextOrientation(): qui représente le mouvement que nos fantômes doivent avoir, Chaque fantôme à son mouvement propre, difficile alors de juger sur le comportement de chaqu'un a ce niveau là.
+			*getTitle(): qui représente le nom du personnage, est celui attribué à son sprite dans le fichier.
+		Certains fantômes dans le jeu:
+			-Blinky: Le complément du Level 0,
+				Le comportement se fait totalement dans la méthode getNextOrientation(), conformément au dossier fourni, ce fantôme change d'orientation à chaque pas , et ne détecte pas nos joueurs.
+			-Inky: Faites attention, il peut vous voiiir.
+				Ce fantôme a la possibiliter de voir notre joueur et meme le PacmanHelp, il a pour cela la méthode interactWith de la classe Ghost qui lui permet de stocker la position de notre player.
+				Dans la classe meme, on retrouve quelques méthodes qui permettent de gérer le mouvement du fantôme, dont la méthode hériter : getNextOrientation(), qui gère le mouvement complet: Cette méthode délègue certaines des tâches à faire à d'autres méthodes, comme pour trouver une position aléatoire
+				ou bien trouver la position qui peut éloigner notre fantôme du player le maximum lorsque le fantôme est en mode affraid.
+			-Pinky: Faites encore attention, il peut vous voiiiiir.
+				Du point de vue conception, le fantôme Pinky ne diffère pas trop du fantôme précédent. Lui auusi muni de méthodes ressemblantes à celle de Inky pour le mouvement, quelques détails au sein meme des méthodes ont été changés, pour faire la différence entre le comportement de Inky et Pinky
+			-GhostArrow: Panne d'idée sur les noms, mais pour dire qu'il peut vous lancer des flèches.
+				Pour ne pas avoir de problème lors de la soumission du projet, on a décidé de faire hériter ce fantôme de Pinky de manière à avoir le même comportement de ce dernier.
+				GhostArrow a biensur d'autres méthodes qui lui permettent de lancer des flèches, et la classe Arrow qui représente ces flèches.
+				Le choix derrière la classe interne est que ce fantôme serra le seul à pour lancer ces flèches, ce qui permet une meilleure encapsulation. 
+	d) CollectableAreaEntity:
+			-Orbe: Pour les adeptes de la vitesse
+				Certains adepte de la vitesse aimeront partir plus vite. Pour cela, nous leurs avons fournit cette petite orbe qui lui permet d'avoir un boost de vitesse pendant 5 secondes. Pour ne pas rendre le jeu facile, l'orbe ne peut être manger qu'une seule fois.
+				Et pour ne pas rendre le jeu difficile, l'orbe change de position chaque 5 secondes. Où se trouvent-elles? A la place d'une bonne pièce.
+			-Heart: Le coaching de pacman.
+				Apparait une fois dans le jeu, nous permet de récolter 2 PV. La rapidité est nécessaire dans ce cas, car il change chaque 5 secondes d'endroit. Pour les plus sages d'entre vous, un petit indice: Rappelez-vous des Cherrys, il faut les manger, mais pas que.
+			-Key: Passe-partout ne les a pas vu venir.
+				Dans chaque niveau, les clés nous permettent d'ouvrir les barrières (Gate) pour pouvoir évoluer dans notre jeu.
+			-Diamond: Tellement rare sur cette Terre, Tellement nombreux dans ce jeu.
+				Récolter des points (10 points)
+			-Cherry: La saison des fruits est la meilleure
+				Trop rien à dire, sauf que pour avoir le 6 il faut faire des trucs.
+			-Bonus:	Pour pouvoir manger autres que des fruits (5 cherry et Ghost par jour)
+				En mangeant l'un des bonus, on peut rendre les fantômes affraid pendant 5 secondes et pouvoir les manger et récolter 500 points. Ils ne l'ont pas vu venir.
+	
+	e) Wall: Dans un labyrinthe, il y a des murs. Dans la maquette, il y'avait la classe.
+	
+	f) Gate: Nous permet de nous assurer que vous ne trichez pas en enchainant les niveaux sans les finir ;-)
+			Chaque gate a un ou plusieurs signaux qui ne s'ouvre que lorsque celui-ci est actif.
+	
+	g) Zelda: Le nom est trompeur ;)
+		Ce personnage acceuille notre joueur lors du passage au LevelX.
+		A la fin du level2, ce personnage se déplace vers notre Joueur pour le féliciter et revient à sa position initiale. Entre temps, le jeu s'arrête complétement(Thread.sleep(2000)), pour avoir un petit effet.
+		Le message s'affiche sur la console, faute de temps ona pas pu faire une bulle pour le message.
+		Concerant les méthodes, cette classe ne diffère pas trop du fantôme Pinky dans l'implémentation (meme idée), et la calsse est facile a comprendre
+V- Quelques idées derrière certains de nos choix:
+	- L'utilisation du DesignPattern Singleton:
+		Comme dans notre jeu nous avons décidé qu'un coeur n'apparaissent qu'une seule fois. nous avons choisit de faire suivre à cette classe ce patron de conception, qui nous aide aussi a bien maitriser notre encapsulation.
+		De meme pour le classe Orbe, PacmanHelp	(PS: pour les classes Heart et Obre, le pattron n'est pas précisement Singleton, mais l'idée de départ a été Singelton, et a été améliorée)
+	- La possibilité de laisser aux fantômes que la gestion de leurs mouvements propres a eux et les interactions qu'ils veulent: Toutes les méthodes dans les futurs classes héritant de Ghost n'auront pas besoin sont soit private soit final pour ceux dont l'on veut fixer la caracteristique.
+	- Conformement au disposition dans le descriptif du projet, à chaque Player son propre handler (pour ceux dont le handler est necessaire)
+VI- Le générateur de Labyrinthe:
+	La classe MazeGenerator dans le package du meme nom sert a créer un labyrinthe aléatoire à chaque fois pour le LevelX, elle stocke la behavior au coté des autres, et l'affiche dans la fenêtre du jeu.
+	Cette algorithme est basé sur les structurse de données des Stacks, et des Sets, et la fin de la premiere partie, création des chemins, et pour un soucis d'utilisation, certains murs interne sont omis pour permettre au pacman de s'enfuire des fantomes.
+VII- D'autres options:
+	Grace a la touche S, vous pouvez dézoomer de votre personnage, et la touche D, vous rapprochez de lui (Zoomer).
+	Grace a la touche P,et contre 1000 points Junior fait son apparition.
