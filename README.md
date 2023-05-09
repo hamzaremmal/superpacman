@@ -20,5 +20,5 @@ It's our implementation of the [CS-107](todo) second project ([2020 Edition](tod
 This project uses [Maven](https://maven.apache.org/) as build tool. We can use the following command to start the game:
 
 ```console
-TODO : Write command
+mvn exec:java
 ```
