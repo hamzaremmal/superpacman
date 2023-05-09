@@ -12,7 +12,6 @@ import ch.epfl.cs107.play.game.superpacman.actor.Key;
 import ch.epfl.cs107.play.game.superpacman.actor.Orbe;
 import ch.epfl.cs107.play.game.superpacman.actor.PacmanHelp;
 import ch.epfl.cs107.play.game.superpacman.actor.SuperPacmanPlayer;
-import play.game.superpacman.actor.*;
 
 /**
  * Interface for all the interaction.
