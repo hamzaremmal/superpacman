@@ -112,10 +112,10 @@ public class Gate extends AreaEntity {
 	
 	/**
 	 * Simulates a single time step.
-	 * @param deltaTime (float): Elapsed time since last update, in seconds, non-negative.
+	 * @param dt (float): Elapsed time since last update, in seconds, non-negative.
 	 */
 	@Override
-	public void update(float deltatime) {
+	public void update(float dt) {
 		Area area =this.getOwnerArea();
 		if(area.getTitle().equals("superpacman/Level2")) {
 			Level2 level = (Level2)area;
